@@ -1,18 +1,18 @@
-package ch.fhnw.oop2.module07.ab2;
+package ch.fhnw.oop2.module07.ab3;
 
 import java.text.DecimalFormat;
 
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.StringProperty;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
+import javafx.util.converter.NumberStringConverter;
 
-public class ApplicationUI extends VBox  {
-
+public class ApplicationUI extends VBox {
 	private Slider slider;
-	private Label label;
+	private TextField textField;
 	
 	public ApplicationUI() {
 		initializeControls();
@@ -24,13 +24,12 @@ public class ApplicationUI extends VBox  {
 	 */
 	public void initializeControls() {
 		
-		label = new Label("5");
-		label.setAlignment(Pos.CENTER);
-		label.setPrefWidth(Double.MAX_VALUE);
-		label.setPadding(new Insets(5,0,5,0));
+		textField = new TextField();
+		textField.setPrefWidth(Double.MAX_VALUE);
+		textField.setPadding(new Insets(5,0,5,0));
 		
 		
-		slider = new Slider(0,10,5);
+		slider = new Slider(0,10,5.00);
 		slider.setShowTickMarks(true);
 		slider.setShowTickLabels(true);
 		slider.setMajorTickUnit(1);
@@ -42,11 +41,16 @@ public class ApplicationUI extends VBox  {
 	 * add bindings
 	 */
 	public void initializeBindings() {
-		DoubleProperty currentValue = slider.valueProperty();
+		DoubleProperty sliderProperty = slider.valueProperty();
+		StringProperty textProperty = textField.textProperty();
 		
-		currentValue.addListener((observableValue, oldValue, newValue) ->{
+		NumberStringConverter convert = new NumberStringConverter();
+		textProperty.bindBidirectional(sliderProperty,convert);
+		
+		
+		sliderProperty.addListener((observableValue, oldValue, newValue) ->{
 			DecimalFormat df = new DecimalFormat("0.00");
-			label.setText(df.format(newValue));
+			textField.setText(df.format(newValue));
 		});
 		
 	}
@@ -54,10 +58,8 @@ public class ApplicationUI extends VBox  {
 	 * Add controls to the vbox.
 	 */
 	public void layoutControls() {
-		getChildren().add(label);
+		getChildren().add(textField);
 		getChildren().add(slider);
 		setPadding(new Insets(10));
 	}
-	
-	
 }
