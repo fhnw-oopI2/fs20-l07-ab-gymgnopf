@@ -47,7 +47,6 @@ public class ApplicationUI extends VBox {
 		NumberStringConverter convert = new NumberStringConverter();
 		textProperty.bindBidirectional(sliderProperty,convert);
 		
-		
 		sliderProperty.addListener((observableValue, oldValue, newValue) ->{
 			DecimalFormat df = new DecimalFormat("0.00");
 			textField.setText(df.format(newValue));
